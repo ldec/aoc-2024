@@ -1,0 +1,5 @@
+rich
+matplotlib
+networkx
+black
+more_itertools
