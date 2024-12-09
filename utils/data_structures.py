@@ -3,19 +3,33 @@ from copy import deepcopy
 import tabulate
 
 class Grid:
-    def __init__(self, width, height, default=''):
+    def __init__(self, width, height, default='.'):
         self.width = width
         self.height = height
+        self.default = default
         self.data = [[default for y in range(width)] for x in range(height)]
+        self.item_map = dict()
 
-    def set(self, x, y, value):
+    def __str__(self):
+        return self.render()
+
+    def set(self, x, y, value, set_item_map=False):
+        if set_item_map:
+            old_value = self.get(x, y)
+            for i in range(len(self.item_map.get(old_value, []))):
+                if self.item_map[old_value][i] == (x,y):
+                    del self.item_map[old_value][i]
+
+            if value != self.default:
+                self.item_map.setdefault(value, list()).append((x,y))
+
         self.data[y][x] = value
+
 
     def get(self, x, y):
         return self.data[y][x]
 
-    def __str__(self):
-        return self.render()
+
 
     def out_of_bound(self, x, y):
         if x < 0 or y < 0:

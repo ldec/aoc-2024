@@ -1,6 +1,8 @@
 from os.path import isfile
 from typing import List, Any, Optional
 
+from utils.data_structures import Grid
+
 
 class Reader:
     """
@@ -50,6 +52,24 @@ class GridReader(FileReader):
 
         return result
 
+class GridReaderv2(FileReader):
+    """
+    Implementation of a grid reader, returning a Grid datastructure
+    """
+    def read(self, *args, **kwargs) -> Grid:
+        """
+        Implementation of a grid reader
+        """
+        data = super(GridReaderv2, self).read().splitlines()
+
+        grid = Grid(len(data), len(list(data[0])))
+
+        for y in range(len(data)):
+            line = list(data[y])
+            for x in range(len(line)):
+                grid.set(x,y, line[x], set_item_map=True)
+
+        return grid
 
 class SpaceDelimitedColumnFileReader(FileReader):
     """
